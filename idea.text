@@ -1,0 +1,91 @@
+Project Title: High-Profile University Learning Management System (LMS)
+
+Tech Stack: HTML, CSS, JavaScript (Frontend), PHP (Backend), MySQL (Database).
+
+Quality Standard: High Security (SQL Injection protection), Professional UI/UX, Responsive Design.
+
+1. core Architecture & Authentication
+
+Database: Create a normalized MySQL database with tables for: Users (id, reg_no, password_hash, role, session, semester, personal_details), Courses, Enrollments, Assignments, Submissions, Grades, Attendance, and Finance.
+
+Authentication:
+
+Create a Login/Register page.
+
+Registration: Users (Student/Instructor) enter a Registration ID. This ID must pre-exist in the database (added by Admin). If the ID matches and has no account yet, allow them to set a password.
+
+Login: Validate Registration ID + Password.
+
+Security: Use password_hash() (Bcrypt) for storage. NO plain text passwords. Use PHP Prepared Statements ($stmt->prepare) strictly to prevent SQL Injection.
+
+Routing: Redirect based on Role:
+
+Student $\to$ student_dashboard.php
+
+Instructor $\to$ instructor_dashboard.php
+
+Admin $\to$ admin_dashboard.php
+
+2. Admin Dashboard (The Controller)
+
+Bulk Management: Instead of manual entry, allow the Admin to upload a CSV file to bulk-create Student and Instructor placeholders (Reg No, Name, Session, Semester).
+
+Scheduling: Admin sets the "Master Schedule" (Subject, Room, Time, Instructor) for each Semester/Session.
+
+Finance Control: Admin can update fee status.
+
+Security: Admin login does not need IP restriction, but must have a robust session timeout implementation.
+
+3. Student Dashboard (The Viewer)
+
+Profile Header: Display Name (S/o, D/o), DOB, Admission Date, Session.
+
+UX Feature - Fee Banner: If fee_status == 'unpaid', display a sticky Red Alert Bar at the top of the dashboard (dismissible for the session, but reappears on refresh). Include a "Download Voucher" button.
+
+Schedule: Read from the database based on the student's current Semester/Session.
+
+Notes: View/Download list of files uploaded by the instructor.
+
+Assignments:
+
+List pending assignments.
+
+Upload Feature: Allow file upload (PDF/Docx) before the due_date. Disable upload button if current_time > due_date.
+
+Grades:
+
+Show a table of grades per subject.
+
+Show a "Result Summary" at the bottom (CGPA/Total Marks).
+
+Attendance: Read from the MySQL Attendance table (display as a progress bar or percentage).
+
+4. Instructor Dashboard (The Manager)
+
+Schedule: specific to the instructor.
+
+Assignments Manager:
+
+Create Assignment (Title, Description, File, Due Date, Class).
+
+Grading Interface: View list of student submissions. Input marks.
+
+Alert: Show a notification: "You have X unchecked assignments for [Subject Name]."
+
+Notes Manager: Upload lecture slides/notes for specific classes.
+
+Grading Module (Advanced):
+
+Allow creating a "Grading Policy" (e.g., Quiz: 10%, Mid: 25%, Final: 50%).
+
+CSV Import: Allow Instructor to upload a CSV (format: RegNo, Marks) to auto-fill grades for the whole class to match the complexity of typical university grading sheets (Theory vs. Lab).
+
+5. Design & Logic Requirements
+
+Frontend: Use a clean, professional CSS framework (like Bootstrap or Tailwind) or custom CSS that looks "Corporate/University" style (Whites, Blues, Greys).
+
+Logic:
+
+Ensure file uploads rename files to prevent conflicts (e.g., studentID_assignmentID.pdf).
+
+Attendance should not rely on Google Sheets. Build a simple interface where the Instructor checks boxes for "Present/Absent" and saves to MySQL
